@@ -1,12 +1,13 @@
 import {ModuleOptions} from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import ReactRefreshTypeScript from 'react-refresh-typescript';
 import {BuildOptions} from './types/types';
+import {buildBabelLoader} from './babel/buildBabelLoader';
 
-export function buildLoaders({mode}: BuildOptions): ModuleOptions['rules'] {
+export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
+
+  const {mode} = options
 
   const isDev = mode === 'development'
-
   const assetLoader = {
     test: /\.(png|jpg|jpeg|gif)$/i,
     type: 'asset/resource',
@@ -53,26 +54,12 @@ export function buildLoaders({mode}: BuildOptions): ModuleOptions['rules'] {
     ],
   }
 
-  const tsLoader = {
-    exclude: /node_modules/,
-    test: /\.tsx?$/,
-    use: [
-      {
-        loader: 'ts-loader',
-        options: {
-          getCustomTransformers: () => ({
-            before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
-          }),
-          transpileOnly: true,
-        },
-      },
-    ],
-  }
+  const babelLoader = buildBabelLoader(options)
 
   return [
     assetLoader,
     scssLoader,
-    tsLoader,
+    babelLoader,
     svgrLoader,
   ]
 }

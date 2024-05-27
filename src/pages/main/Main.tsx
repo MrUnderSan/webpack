@@ -7,9 +7,9 @@ import AppImage from 'src/assets/app-image.svg'
 export const Main = () => {
 
   return (
-    <div>
+    <div data-testid={'Main.DataTestId'}>
 
-      <div>
+      <div data-testid={'Links.DataTestId'}>
         <Link to={'/about'}>about</Link>
         <br/>
         <Link to={'/shop'}>shop</Link>
